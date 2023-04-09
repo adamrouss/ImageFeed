@@ -35,9 +35,7 @@ extension ImagesListViewController: UITableViewDataSource {
         guard let imageListCell = cell as? ImagesListCell else {
             return UITableViewCell()
         }
-        
         configCell(for: imageListCell, with: indexPath)
-        
         return imageListCell
     }
 }
@@ -47,7 +45,6 @@ extension ImagesListViewController {
         guard let image = UIImage(named: photosName[indexPath.row]) else {
             return
         }
-        
         cell.cellImage.image = image
         cell.dateLabel.text = dateFormatter.string(from: Date())
         
