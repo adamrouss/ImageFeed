@@ -14,15 +14,15 @@ final class ImagesListViewController: UIViewController {
     private let photosName: [String] = Array(0..<20).map{ "\($0)" }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-           if segue.identifier == ShowSingleImageSegueIdentifier {
-               let viewController = segue.destination as! SingleImageViewController
-               let indexPath = sender as! IndexPath
-               let image = UIImage(named: photosName[indexPath.row])
-               viewController.image = image
-           } else {
-               super.prepare(for: segue, sender: sender)
-           }
-       }
+        if segue.identifier == ShowSingleImageSegueIdentifier {
+            let viewController = segue.destination as! SingleImageViewController
+            let indexPath = sender as! IndexPath
+            let image = UIImage(named: photosName[indexPath.row])
+            viewController.image = image
+        } else {
+            super.prepare(for: segue, sender: sender)
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
