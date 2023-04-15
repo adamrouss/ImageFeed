@@ -207,9 +207,27 @@
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="aRG-sq-HUN">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
-                            </imageView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Alg-hE-0fY">
+                                <rect key="frame" x="-20" y="-20" width="430" height="884"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bQT-IN-64c">
+                                        <rect key="frame" x="178" y="725" width="75" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                    </button>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="aRG-sq-HUN">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="414"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                </subviews>
+                                <viewLayoutGuide key="contentLayoutGuide" id="ZsP-gF-L1u"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="QHY-21-apZ"/>
+                                <connections>
+                                    <outlet property="delegate" destination="be8-OA-uQF" id="98W-dS-CVt"/>
+                                </connections>
+                            </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8yM-gb-TYi">
                                 <rect key="frame" x="8" y="55" width="48" height="48"/>
                                 <constraints>
@@ -226,22 +244,19 @@
                         <viewLayoutGuide key="safeArea" id="q4B-n7-fS4"/>
                         <color key="backgroundColor" red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="aRG-sq-HUN" firstAttribute="trailing" secondItem="GY6-Au-kju" secondAttribute="trailing" id="Dss-S7-glF"/>
                             <constraint firstItem="8yM-gb-TYi" firstAttribute="leading" secondItem="q4B-n7-fS4" secondAttribute="leading" constant="8" id="EU7-nf-rlS"/>
-                            <constraint firstItem="aRG-sq-HUN" firstAttribute="top" secondItem="GY6-Au-kju" secondAttribute="top" id="Yv6-su-oC7"/>
-                            <constraint firstItem="aRG-sq-HUN" firstAttribute="leading" secondItem="GY6-Au-kju" secondAttribute="leading" id="hSv-wo-TMz"/>
                             <constraint firstItem="8yM-gb-TYi" firstAttribute="top" secondItem="q4B-n7-fS4" secondAttribute="top" constant="8" id="jUg-Lv-tZN"/>
-                            <constraint firstItem="aRG-sq-HUN" firstAttribute="bottom" secondItem="GY6-Au-kju" secondAttribute="bottom" id="mxg-2w-sUB"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="fi5-bh-BEX"/>
                     <connections>
                         <outlet property="imageView" destination="aRG-sq-HUN" id="uBz-zd-c2F"/>
+                        <outlet property="scrollView" destination="Alg-hE-0fY" id="KW0-Jd-lQc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Qp-cY-2J1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="332" y="-600"/>
+            <point key="canvasLocation" x="330.76923076923077" y="-600"/>
         </scene>
     </scenes>
     <resources>
