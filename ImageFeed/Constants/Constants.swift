@@ -9,7 +9,7 @@ import UIKit
 
 let AccessKey = "Cx467gFkvALpQdZoYUMsDMtuAJ9hSNWlYwK77e4r0xw"
 let SecretKey = "9FJKZkyioNFpatROnxpMAw-hq7OPSETUPm6xrfMX9Xs"
-let RedirectURL = "urn:ietf:wg:oauth:2.0:oob"
+let RedirectURI = "urn:ietf:wg:oauth:2.0:oob"
 let AccessScope = "public+read_user+write_likes"
-let DefaultBaseUrl = URL(string: "https://api.unsplash.com")!
+let DefaultBaseURL = URL(string: "https://api.unsplash.com")!
 
