@@ -95,7 +95,35 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1366" y="127"/>
+            <point key="canvasLocation" x="-2112" y="127"/>
+        </scene>
+        <!--Splash View Controller-->
+        <scene sceneID="Zm1-F4-a9X">
+            <objects>
+                <viewController id="y4Y-Cv-0Zg" customClass="SplashViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="lr5-Q1-Vkf">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Vector" translatesAutoresizingMaskIntoConstraints="NO" id="mOB-ES-FEG">
+                                <rect key="frame" x="157.66666666666666" y="383" width="75" height="78"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="78" id="fVC-QF-X2o"/>
+                                    <constraint firstAttribute="width" constant="75" id="sR7-kU-cfW"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="cA5-fU-Zq4"/>
+                        <color key="backgroundColor" red="0.1019607843" green="0.1058823529" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="mOB-ES-FEG" firstAttribute="centerX" secondItem="lr5-Q1-Vkf" secondAttribute="centerX" id="rzn-Bm-3n4"/>
+                            <constraint firstItem="mOB-ES-FEG" firstAttribute="centerY" secondItem="lr5-Q1-Vkf" secondAttribute="centerY" id="uKq-X2-tjw"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7OL-gd-iqR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3711" y="-600"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="1ss-5D-4CC">
@@ -117,7 +145,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5yZ-Lq-VsO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2112" y="127"/>
+            <point key="canvasLocation" x="-2878" y="127"/>
         </scene>
         <!--Profile-->
         <scene sceneID="D1K-kA-z7T">
@@ -134,7 +162,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OVT-Fy-Jzs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2112" y="901"/>
+            <point key="canvasLocation" x="-2878" y="839"/>
         </scene>
         <!--Single Image View Controller-->
         <scene sceneID="QhS-AS-S9j">
@@ -205,7 +233,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OnZ-LP-EiM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-598" y="127"/>
+            <point key="canvasLocation" x="-1266" y="127"/>
         </scene>
         <!--Auth View Controller-->
         <scene sceneID="Mc7-eY-2nW">
@@ -337,6 +365,7 @@
     </scenes>
     <resources>
         <image name="0" width="200" height="132"/>
+        <image name="Vector" width="75" height="78"/>
         <image name="auth_screen_logo" width="60" height="60"/>
         <image name="like_button_on" width="42" height="42"/>
         <image name="nav_back_button" width="24" height="24"/>

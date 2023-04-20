@@ -16,11 +16,18 @@ protocol WebViewViewControllerDelegate: AnyObject {
 }
 
 final class WebViewViewController: UIViewController {
-    @IBOutlet private var webView: WKWebView!
+    weak var delegate: WebViewViewControllerDelegate?
     
+    // MARK: - IBOutlet
+    
+    @IBOutlet private var webView: WKWebView!
     @IBOutlet private var progressView: UIProgressView!
     
-    weak var delegate: WebViewViewControllerDelegate?
+    // MARK: - IBAction
+    
+    @IBAction private func didTapBackButton(_ sender: Any?) {
+        delegate?.webViewViewControllerDidCancel(self)
+    }
     
     // MARK: - UIViewController
     
@@ -37,13 +44,8 @@ final class WebViewViewController: UIViewController {
             URLQueryItem(name: "scope", value: AccessScope)
         ]
         let url = urlComponents.url!
-        
         let request = URLRequest(url: url)
         webView.load(request)
-    }
-    
-    @IBAction private func didTapBackButton(_ sender: Any?) {
-        delegate?.webViewViewControllerDidCancel(self)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -75,7 +77,6 @@ final class WebViewViewController: UIViewController {
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
     }
 }
-
 // MARK: - WKNavigationDelegate
 
 extension WebViewViewController: WKNavigationDelegate {

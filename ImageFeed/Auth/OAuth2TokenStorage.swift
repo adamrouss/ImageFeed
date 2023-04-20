@@ -13,7 +13,7 @@ final class OAuth2TokenStorage {
     var token: String? {
         get {
             guard let token = userDefaults.string(forKey: Keys.token.rawValue) else {
-                print("Нет сохраненного токена в UserDefaults")
+                print("Нет токена в UserDefaults")
                 return nil
             }
             return token
