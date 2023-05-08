@@ -17,22 +17,23 @@ final class OAuth2Service {
         set {
             OAuth2TokenStorage().token = newValue
         } }
-    func fetchOAuthToken(
-        _ code: String,
-        completion: @escaping (Result<String, Error>) -> Void ){
-            let request = authTokenRequest(code: code)
-            let task = object(for: request) { [weak self] result in
-                guard let self = self else { return }
-                switch result {
-                case .success(let body):
-                    let authToken = body.accessToken
-                    self.authToken = authToken
-                    completion(.success(authToken))
-                case .failure(let error):
-                    completion(.failure(error))
-                } }
-            task.resume()
+    func fetchOAuthToken (_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
+        let request = authTokenRequest(code: code)
+        print(request)
+        let task = object(for: request) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let body):
+                let authToken = body.accessToken
+                self.authToken = authToken
+                print(authToken)
+                completion(.success(authToken))
+            case .failure(let error):
+                completion(.failure(error))
+            }
         }
+        task.resume()
+    }
 }
 extension OAuth2Service {
     private func object(
@@ -50,9 +51,9 @@ extension OAuth2Service {
     private func authTokenRequest(code: String) -> URLRequest {
         URLRequest.makeHTTPRequest(
             path: "/oauth/token"
-            + "?client_id=\(AccessKey)"
-            + "&&client_secret=\(SecretKey)"
-            + "&&redirect_uri=\(RedirectURI)"
+            + "?client_id=\(Constants.accessKey)"
+            + "&&client_secret=\(Constants.secretKey)"
+            + "&&redirect_uri=\(Constants.redirectURI)"
             + "&&code=\(code)"
             + "&&grant_type=authorization_code",
             httpMethod: "POST",
@@ -77,7 +78,7 @@ extension URLRequest {
     static func makeHTTPRequest(
         path: String,
         httpMethod: String,
-        baseURL: URL = DefaultBaseURL
+        baseURL: URL = Constants.defaultBaseURL
     ) -> URLRequest {
         
         
