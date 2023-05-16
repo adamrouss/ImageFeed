@@ -56,7 +56,7 @@ final class SingleImageViewController: UIViewController{
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         guard let imageViewSize = view?.frame.size else {
-            return 
+            return
         }
         
         let scrollViewSize = scrollView.bounds.size

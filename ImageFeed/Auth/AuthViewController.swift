@@ -12,15 +12,20 @@ protocol AuthViewControllerDelegate: AnyObject {
 }
 
 final class AuthViewController: UIViewController {
-    private let ShowWebViewSegueIdentifier = "ShowWebView"
-
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
+    }
+    
     weak var delegate: AuthViewControllerDelegate?
-
+    
+    private let showWebViewSegueIdentifier = "ShowWebView"
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == ShowWebViewSegueIdentifier {
+        if segue.identifier == showWebViewSegueIdentifier {
             guard
-                let webViewViewController = segue.destination as? WebViewViewController
-            else { fatalError("Failed to prepare for \(ShowWebViewSegueIdentifier)") }
+                let webViewViewController = segue.destination as? WebViewViewController else { fatalError("Failed to prepare for \(showWebViewSegueIdentifier)") }
+            webViewViewController.modalPresentationCapturesStatusBarAppearance = true
             webViewViewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
@@ -28,9 +33,11 @@ final class AuthViewController: UIViewController {
     }
 }
 
+// MARK: - WebViewViewControllerDelegate
+
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        OAuth2Service.shared.fetchOAuthToken(code) { [weak self] result in
+        OAuth2Service.shared.fetchAuthToken(code) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success:

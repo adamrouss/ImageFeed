@@ -14,16 +14,22 @@ final class SplashViewController: UIViewController {
         .lightContent
     }
     
+    private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
+    private let authService = OAuth2Service.shared
+    private let alertPresenter = AlertPresenter.shared
+    
     private let showLoginFlowSegueIdentifier = "ShowLoginFlow"
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
         checkAuthStatus()
     }
     
     private func checkAuthStatus() {
-        if OAuth2TokenStorage().token != nil {
-            switchToTabBarController()
+        if let token = OAuth2TokenStorage().token {
+            self.fetchProfile(token: token)
         } else {
             performSegue(withIdentifier: showLoginFlowSegueIdentifier, sender: nil)
         }
@@ -54,7 +60,7 @@ extension SplashViewController {
 
 extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
-        ProgressHUD.show()
+        UIBlockingProgressHUD.show()
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
             self.fetchOAuthToken(code)
@@ -62,16 +68,45 @@ extension SplashViewController: AuthViewControllerDelegate {
     }
     
     private func fetchOAuthToken(_ code: String) {
-        OAuth2Service.shared.fetchOAuthToken(code) { [weak self] result in
+        authService.fetchAuthToken(code) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
             guard let self = self else { return }
             switch result {
-            case .success:
+            case .success(let token):
+                self.fetchProfile(token: token)
+            case .failure(let error):
+                self.alertPresenter.createAlert(title: "Что-то пошло не так :(",
+                                                message: "Не удалось войти в систему. \(error.localizedDescription)") {
+                    self.performSegue(withIdentifier: self.showLoginFlowSegueIdentifier, sender: nil)
+                }
+            }
+        }
+    }
+    
+    private func fetchProfile(token: String) {
+        profileService.fetchProfile(token) { [weak self] profileResult in
+            UIBlockingProgressHUD.dismiss()
+            guard let self = self else { return }
+            switch profileResult {
+            case .success(let result):
+                let profile = ProfileService.shared.convertProfile(profile: result)
+                let username = profile.username
+                self.profileImageService.fetchProfileImageURL(userName: username) { _ in }
                 self.switchToTabBarController()
-            case .failure:
-                ProgressHUD.dismiss()
-                // TODO [Sprint 11]
-                break
+            case .failure(let error):
+                self.alertPresenter.createAlert(title: "Что-то пошло не так :(",
+                                                message: "Не удалось войти в систему, \(error.localizedDescription)") {
+                    self.performSegue(withIdentifier: self.showLoginFlowSegueIdentifier, sender: nil)
+                }
             }
         }
     }
 }
+
+// MARK: - AlertPresenterProtocol
+extension SplashViewController: AlertPresenterProtocol {
+    func showAlert(alert: UIAlertController) {
+        self.present(alert, animated: true)
+    }
+}
+
