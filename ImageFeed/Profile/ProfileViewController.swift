@@ -88,8 +88,6 @@ final class ProfileViewController: UIViewController {
             imageView.widthAnchor.constraint(equalToConstant: 70),
             imageView.heightAnchor.constraint(equalToConstant: 70),
             
-            
-            
             nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
             nameLabel.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
             

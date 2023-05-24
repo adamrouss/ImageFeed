@@ -9,9 +9,9 @@ import UIKit
 
 final class ImagesListViewController: UIViewController {
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
+    private let photosName: [String] = Array(0..<20).map{ "\($0)" }
     
     @IBOutlet private var tableView: UITableView!
-    private let photosName: [String] = Array(0..<20).map{ "\($0)" }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showSingleImageSegueIdentifier {
@@ -19,14 +19,14 @@ final class ImagesListViewController: UIViewController {
                   let indexPath = sender as? IndexPath,
                   let image = UIImage(named: photosName[indexPath.row])
             else {
-                return 
+                return
             }
             viewController.image = image
         } else {
             super.prepare(for: segue, sender: sender)
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)

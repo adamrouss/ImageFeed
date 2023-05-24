@@ -10,10 +10,8 @@ import UIKit
 final class ProfileImageService {
     static let shared = ProfileImageService()
     static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
-    
     private var currentTask: URLSessionTask?
     private let networkClient = NetworkClient.shared
-    
     private (set) var avatarURL: String?
     
     func fetchProfileImageURL(userName: String, completion: @escaping (Result<String, Error>) -> Void) {

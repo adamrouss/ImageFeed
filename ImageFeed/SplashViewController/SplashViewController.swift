@@ -14,24 +14,61 @@ final class SplashViewController: UIViewController {
         .lightContent
     }
     
-    private let profileService = ProfileService.shared
-    private let profileImageService = ProfileImageService.shared
-    private let authService = OAuth2Service.shared
+    private let profileService: ProfileService
+    private let profileImageService: ProfileImageService
+    private let authService: OAuth2Service
     private let alertPresenter = AlertPresenter.shared
-    
     private let showLoginFlowSegueIdentifier = "ShowLoginFlow"
+    private let backgroundImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "auth_screen_logo")
+        return imageView
+    }()
+    
+    // MARK: - Initializers
+    init(profileService: ProfileService = ProfileService.shared,
+         profileImageService: ProfileImageService = ProfileImageService.shared,
+         authService: OAuth2Service = OAuth2Service.shared) {
+        self.profileService = profileService
+        self.authService = authService
+        self.profileImageService = profileImageService
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = customColor
+        setupUI()
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         checkAuthStatus()
+    }
+    
+    private func setupUI() {
+        view.addViews(backgroundImage)
+        NSLayoutConstraint.activate([
+            backgroundImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            backgroundImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            backgroundImage.heightAnchor.constraint(equalToConstant: 75),
+            backgroundImage.widthAnchor.constraint(equalToConstant: 78)
+        ])
     }
     
     private func checkAuthStatus() {
         if let token = OAuth2TokenStorage().token {
             self.fetchProfile(token: token)
         } else {
-            performSegue(withIdentifier: showLoginFlowSegueIdentifier, sender: nil)
+            let viewController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(identifier: "AuthViewControllerID")
+            guard let authViewController = viewController as? AuthViewController else { return }
+            authViewController.delegate = self
+            authViewController.modalPresentationStyle = .fullScreen
+            present(authViewController, animated: true)
         }
     }
     
@@ -43,19 +80,12 @@ final class SplashViewController: UIViewController {
     }
 }
 
-extension SplashViewController {
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == showLoginFlowSegueIdentifier {
-            guard
-                let viewController = segue.destination as? AuthViewController else { fatalError("Failed to prepare for \(showLoginFlowSegueIdentifier)") }
-            viewController.modalPresentationCapturesStatusBarAppearance = true
-            viewController.delegate = self
-        } else {
-            super.prepare(for: segue, sender: sender)
-        }
+extension UIView {
+    func addViews(_ view: UIView){
+        self.addSubview(view)
+        view.translatesAutoresizingMaskIntoConstraints = false
     }
 }
-
 // MARK: - AuthViewControllerDelegate
 
 extension SplashViewController: AuthViewControllerDelegate {
@@ -75,10 +105,9 @@ extension SplashViewController: AuthViewControllerDelegate {
             case .success(let token):
                 self.fetchProfile(token: token)
             case .failure(let error):
-                self.alertPresenter.createAlert(title: "Что-то пошло не так :(",
-                                                message: "Не удалось войти в систему. \(error.localizedDescription)") {
-                    self.performSegue(withIdentifier: self.showLoginFlowSegueIdentifier, sender: nil)
-                }
+                self.showAlert(with: error)
+                break
+                
             }
         }
     }
@@ -94,19 +123,22 @@ extension SplashViewController: AuthViewControllerDelegate {
                 self.profileImageService.fetchProfileImageURL(userName: username) { _ in }
                 self.switchToTabBarController()
             case .failure(let error):
-                self.alertPresenter.createAlert(title: "Что-то пошло не так :(",
-                                                message: "Не удалось войти в систему, \(error.localizedDescription)") {
-                    self.performSegue(withIdentifier: self.showLoginFlowSegueIdentifier, sender: nil)
-                }
+                self.showAlert(with: error)
+                break
             }
         }
     }
-}
-
-// MARK: - AlertPresenterProtocol
-extension SplashViewController: AlertPresenterProtocol {
-    func showAlert(alert: UIAlertController) {
-        self.present(alert, animated: true)
+    
+    // MARK: - ShowAlert
+    private func showAlert(with error: Error) {
+        let alert = UIAlertController(
+            title: "Что-то пошло не так :(",
+            message: "Не удалось войти в систему",
+            preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+        self.present(alert, animated: true, completion: nil)
     }
 }
+
+
 

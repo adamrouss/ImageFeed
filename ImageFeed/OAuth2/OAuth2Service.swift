@@ -12,10 +12,8 @@ final class OAuth2Service {
     
     private let tokenStorage = OAuth2TokenStorage.shared
     private let networkClient = NetworkClient.shared
-    
     private var currentTask: URLSessionTask?
     private var lastCode: String?
-    
     private (set) var authToken: String? {
         get {
             tokenStorage.token
@@ -67,7 +65,6 @@ private struct OAuthTokenResponseBody: Decodable {
         case scope
         case createdAt = "created_at"
     }
-    
 }
 
 extension OAuth2Service {
