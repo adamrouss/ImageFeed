@@ -14,10 +14,10 @@ final class SplashViewController: UIViewController {
         .lightContent
     }
     
+    // MARK: - Private Properties
     private let profileService: ProfileService
     private let profileImageService: ProfileImageService
     private let authService: OAuth2Service
-    private let alertPresenter = AlertPresenter.shared
     private let showLoginFlowSegueIdentifier = "ShowLoginFlow"
     private let backgroundImage: UIImageView = {
         let imageView = UIImageView()
@@ -25,7 +25,7 @@ final class SplashViewController: UIViewController {
         return imageView
     }()
     
-    // MARK: - Initializers
+    // MARK: - Init
     init(profileService: ProfileService = ProfileService.shared,
          profileImageService: ProfileImageService = ProfileImageService.shared,
          authService: OAuth2Service = OAuth2Service.shared) {
@@ -39,6 +39,7 @@ final class SplashViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = customColor
@@ -50,6 +51,7 @@ final class SplashViewController: UIViewController {
         checkAuthStatus()
     }
     
+    // MARK: - Private Methods
     private func setupUI() {
         view.addViews(backgroundImage)
         NSLayoutConstraint.activate([
