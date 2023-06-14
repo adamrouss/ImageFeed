@@ -21,7 +21,7 @@ final class ProfileTests: XCTestCase {
         _ = viewController.view
         
         //then
-        XCTAssertTrue(presenter.viewDidLoadCalled) //behaviour verification
+        XCTAssertTrue(presenter.viewDidLoadCalled) 
     }
     
     func testGetUrlForProfileImage() {
@@ -33,7 +33,7 @@ final class ProfileTests: XCTestCase {
         let url = presenter.getUrlForProfileImage()?.absoluteString
         
         //then
-        XCTAssertEqual(url, Constants.baseURLString) //return value verification
+        XCTAssertEqual(url, Constants.baseURLString)
     }
     
     func testUpdateAvatar() {
@@ -48,7 +48,7 @@ final class ProfileTests: XCTestCase {
         viewController.updateAvatar()
         
         //then
-        XCTAssertTrue(viewController.updateChanged) //behaviour verification
+        XCTAssertTrue(viewController.updateChanged)
     }
     
     func testShowLogoutAlert() {
@@ -63,7 +63,7 @@ final class ProfileTests: XCTestCase {
         viewController.showLogOutAlert()
         
         //then
-        XCTAssertTrue(presenter.isAlertShowed) //behaviour verification
+        XCTAssertTrue(presenter.isAlertShowed)
     }
 }
 

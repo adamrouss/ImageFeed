@@ -10,7 +10,6 @@ import XCTest
 
 final class ImagesListServiceMock: ImagesListServiceProtocol {
     var photos: [ImageFeed.Photo] = []
-    
     var fetchPhotosNextPageCalled: Bool = false
     var changeLikeCalled: Bool = false
     

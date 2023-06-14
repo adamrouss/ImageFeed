@@ -34,9 +34,6 @@ final class ImageFeedUITests: XCTestCase {
         passwordTextField.tap()
         passwordTextField.typeText("Qwerty001")
         app.toolbars["Toolbar"].buttons["Done"].tap()
-        
-        
-        
         webView.buttons["Login"].tap()
         
         sleep(5)
@@ -55,7 +52,6 @@ final class ImageFeedUITests: XCTestCase {
         let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
         cell.swipeUp()
         sleep(2)
-        
         let cellToLike = tablesQuery.children(matching: .cell).element(boundBy: 1)
         cellToLike.buttons["likeButton"].tap()
         sleep(2)
