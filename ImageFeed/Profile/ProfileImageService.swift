@@ -12,6 +12,7 @@ final class ProfileImageService {
     static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     private var currentTask: URLSessionTask?
     private let networkClient = NetworkClient.shared
+    private let profileService = ProfileService.shared
     private (set) var avatarURL: String?
     
     func fetchProfileImageURL(userName: String, completion: @escaping (Result<String, Error>) -> Void) {

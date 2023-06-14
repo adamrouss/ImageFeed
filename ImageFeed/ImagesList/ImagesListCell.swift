@@ -20,7 +20,7 @@ final class ImagesListCell: UITableViewCell {
     weak var delegate: ImagesListCellDelegate?
     
     // MARK: - IBOutlet
-
+    
     @IBOutlet var photoImageView: UIImageView!
     @IBOutlet var likeButton: UIButton!
     @IBOutlet var dateLabel: UILabel!
@@ -34,11 +34,11 @@ final class ImagesListCell: UITableViewCell {
     
     func setIsLiked(isLiked: Bool) {
         let likeImage = isLiked ? Images.isLiked : Images.isNotLiked
-           likeButton.setImage(likeImage, for: .normal)
-       }
+        likeButton.setImage(likeImage, for: .normal)
+    }
     
     // MARK: - IBAction
-
+    
     @IBAction private func likeButtonClicked(_ sender: Any) {
         delegate?.imageListCellDidTapLike(self)
     }

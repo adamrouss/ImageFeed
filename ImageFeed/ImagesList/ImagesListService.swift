@@ -7,6 +7,12 @@
 
 import UIKit
 
+protocol ImagesListServiceProtocol {
+    var photos: [Photo] { get }
+    func fetchPhotosNextPage(completion: @escaping (Result<[Photo], Error>) -> Void)
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void)
+}
+
 final class ImagesListService {
     static let shared = ImagesListService()
     static let didChangeNotification = Notification.Name("ImagesListServiceDidChange")
@@ -28,7 +34,7 @@ final class ImagesListService {
             return
         }
         
-        let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
+        let nextPage = lastLoadedPage == nil ? 0 : lastLoadedPage! + 1
         
         guard
             let request = imageListRequest(page: nextPage) else {

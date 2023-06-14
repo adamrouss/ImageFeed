@@ -7,6 +7,8 @@
 
 import UIKit
 
+protocol ImagesListViewControllerProtocol: AnyObject {}
+
 final class ImagesListViewController: UIViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent

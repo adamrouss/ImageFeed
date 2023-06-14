@@ -44,5 +44,5 @@ struct UrlsResult: Codable {
 struct LikePhotoResult: Codable {
     let photo: PhotosResult?
 }
- 
+
 

@@ -9,20 +9,29 @@ import UIKit
 import Kingfisher
 import WebKit
 
-final class ProfileViewController: UIViewController {
-    
-    private let profileImageService = ProfileImageService.shared
-    private let alertPresenter = AlertPresenter()
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfilePresenterProtocol { get set }
+    func updateAvatar()
+    func showLogOutAlert()
+}
 
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
+    }
     
-    private let imageView: UIImageView = {
+    lazy var presenter: ProfilePresenterProtocol = {
+        return ProfilePresenter()
+    }()
+    
+    private var imageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "avatar"))
         imageView.layer.masksToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
-    private let nameLabel: UILabel = {
+    private var nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Екатерина Новикова"
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -31,7 +40,7 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private let loginLabel: UILabel = {
+    private var loginLabel: UILabel = {
         let label = UILabel()
         label.text = "@ekaterina_nov"
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -40,7 +49,7 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private let descriptionLabel: UILabel = {
+    private var descriptionLabel: UILabel = {
         let label = UILabel()
         label.text = "Hello, world!"
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -51,43 +60,25 @@ final class ProfileViewController: UIViewController {
     
     private let logoutButton: UIButton = {
         let logoutButton = UIButton()
+        logoutButton.accessibilityIdentifier = "logoutButton"
         logoutButton.setImage(Images.logout_Button, for: .normal)
         logoutButton.addTarget(self, action: #selector(didTappedExitButton), for: .touchUpInside)
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
         return logoutButton
     }()
     
-    private var profileImageServiceObserver: NSObjectProtocol?
     
     @objc private func didTappedExitButton() {
-        let yesAction = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
-            guard let self = self else { return }
-            self.logOutFromProfile()
-        }
-        
-        let noAction = UIAlertAction(title: "Нет", style: .default)
-        
-        alertPresenter.prepeareAlertForExit(
-            alertTitle: "Пока, пока!",
-            alertMessage:"Уверены, что хотите выйти?",
-            alertActions: [yesAction, noAction])
+        showLogOutAlert()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let profile = ProfileService.shared.profile else { return }
         updateProfileUIData(profile: profile)
+        presenter.viewDidLoad()
         addSubviews()
         applyConstraints()
-        alertPresenter.delegate = self
-        profileImageServiceObserver = NotificationCenter.default.addObserver(
-            forName: ProfileImageService.didChangeNotification,
-            object: nil,
-            queue: .main
-        ){ [weak self] _ in
-            guard let self = self else { return }
-            self.updateAvatar()
-        }
         updateAvatar()
     }
     
@@ -123,14 +114,21 @@ final class ProfileViewController: UIViewController {
         ])
     }
     
-    private func updateAvatar() {
-        guard
-            let profileImageURl = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURl)
-        else { return }
-        imageView.kf.indicatorType = .activity
+    func showLogOutAlert() {
+        let alert = presenter.createAlert()
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func updateAvatar() {
+        guard let url = presenter.getUrlForProfileImage() else { return }
         let processor = RoundCornerImageProcessor(cornerRadius: 61)
-        imageView.kf.setImage(with: url, options: [.processor(processor)])
+        imageView.kf.indicatorType = .activity
+        imageView.kf.setImage(with: url, placeholder: UIImage(named: "person_crop_circle_fill"), options: [.processor(processor)])
+        imageView.layer.cornerRadius = 36
+        imageView.layer.masksToBounds = true
+        let cache = ImageCache.default
+        cache.clearDiskCache()
+        cache.clearMemoryCache()
     }
 }
 extension ProfileViewController {
@@ -140,38 +138,6 @@ extension ProfileViewController {
             self.descriptionLabel.text = profile.bio
             self.loginLabel.text = profile.loginName
         }
-    }
-}
-extension ProfileViewController {
-    private func cleanCookie() {
-        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
-            records.forEach { record in
-                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record]) { }
-            }
-        }
-    }
-    
-    private func cleanStorage() {
-        OAuth2TokenStorage.shared.removeToken()
-    }
-    
-    private func logOutFromProfile() {
-        cleanCookie()
-        cleanStorage()
-        
-        guard let window = UIApplication.shared.windows.first else {
-            assertionFailure("Invalid configuration")
-            return
-        }
-        let splashVC = SplashViewController()
-        window.rootViewController = splashVC
-    }
-}
-
-extension ProfileViewController: AlertPresenterDelegate {
-    func showAlert(alert: UIAlertController) {
-        present(alert, animated: true)
     }
 }
 
